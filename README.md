@@ -173,7 +173,7 @@ Document mentioned in the video tutorial [Link](https://www.slacker-labs.com/set
 
 ---
 
-## Installation Steps on Rapberry Pi 1
+## Installation Steps on Rapberry Pi 2
 ### Step 1: Install Home Assistant OS on Second PI:
 1. Install **Raspberry Pi Imager** from [https://www.raspberrypi.com/software/](https://www.raspberrypi.com/software/).
 2. Use the imager to install **HomeAssistant OS**:
@@ -182,8 +182,8 @@ Document mentioned in the video tutorial [Link](https://www.slacker-labs.com/set
 
 ---
 
-### Step 2: Configuration
-Refer to this detailed video explanation for the same [Link](https://drive.google.com/file/d/1d1jemFtziGqCuP5M1FA6Jw559HZlRKJM/view?usp=drive_link).
+### Step 2: Configuration:
+- Refer to this detailed video explanation for the same [Link](https://drive.google.com/file/d/1d1jemFtziGqCuP5M1FA6Jw559HZlRKJM/view?usp=drive_link).
 ---
 
 ## Future Enhancements
