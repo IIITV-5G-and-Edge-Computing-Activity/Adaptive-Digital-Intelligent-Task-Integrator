@@ -9,10 +9,12 @@
 ## Project Description
 This project explores the integration of conversational AI and home automation systems using cost-effective and compact hardware solutions. Utilizing two Raspberry Pi devices, the system combines voice-based control with intelligent automation. 
 
-- **Node 1** is configured to handle audio input and output via a Bluetooth headset.
-- **Node 2** hosts the Home Assistant platform to manage automation tasks.
-- Speech-to-text and text-to-speech functionalities are implemented using **Whisper** and **Piper**, respectively.
-- The **Llama 3.2 model** powers natural language processing for chatbot interactions.
+- **Node 1** is configured to handle audio input and output via a Bluetooth headset. (Raspberry PI)
+- **Node 2** hosts the Home Assistant platform to manage automation tasks. (Raspberry PI)
+
+- **AI Server** has following functionalities
+   - Speech-to-text and text-to-speech functionalities are implemented using **Whisper** and **Piper**, respectively.
+   - The **Llama 3.2 model** powers natural language processing for chatbot interactions.
 
 The project demonstrates:
 - Seamless communication between devices
@@ -28,10 +30,25 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
 
 ---
 
-## Installation Steps
+## Harware Description:
+
+- **Raspberry PI**
+   - Pi 4 model b
+   - 4 GB RAM
+   - 64-bit quad core Cortex A72 Processor
+
+- **Ai Server**
+   - OS: Ubuntu 24.04.1 LTS
+   - Processor: AMD Ryzen™ 7 5800H with Radeon™ Graphics × 16
+   - RAM: 16 GB
+   - Graphics Card: Nvidia 3050 RTX 4GB
+---
+
+
+## Installation Steps on AI Sever
 
 ### Step 1: Pull and Run Docker Images
-1. Pull the following Docker images:
+1. Run container for piper and whisper with following images:
    - `rhasspy/wyoming-whisper`
    - `rhasspy/wyoming-piper:1.3.0`
 2. **Why use these images?**
@@ -40,13 +57,14 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
 
    Use the following commands:
    ```bash
-   docker pull rhasspy/wyoming-whisper
-   docker pull rhasspy/wyoming-piper:1.3.0
+   docker run -itd -p 10300:10300 -v ./whisperdata:/data rhasspy/wyoming-whisper --model tiny-int8 --language en
+   docker run -itd -p 10200:10200 -v ./piperdata:/data rhasspy/wyoming-piper --voice en_US-lessac-medium
    ```
 
 3. Expose the ports on which the Docker images are running:
    ```bash
-   sudo ufw allow <portnumber>/tcp
+   sudo ufw allow 10300/tcp
+   sudo ufw allow 10200/tcp
    ```
 
 ---
@@ -67,9 +85,16 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
      ```bash
      sudo nano /etc/systemd/system/ollama.service
      ```
-   - Add the following line:
+   - Replace Service Section with this:
      ```bash
-     Environment="OLLAMA_HOST=0.0.0.0:11434"
+      [Service]
+      ExecStart=/usr/local/bin/ollama serve
+      User=ollama
+      Group=ollama
+      Restart=always
+      RestartSec=3
+      Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+      Environment="OLLAMA_HOST=0.0.0.0:11434"
      ```
    - Reload the system daemon and restart Ollama:
      ```bash
@@ -79,7 +104,9 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
 
 ---
 
-### Step 3: Set Up Raspberry Pi OS
+## Installation Steps on Rapberry Pi 1
+
+### Step 1: Set Up Raspberry Pi OS
 1. Install **Raspberry Pi Imager** from [https://www.raspberrypi.com/software/](https://www.raspberrypi.com/software/).
 2. Use the imager to install **Ubuntu Desktop 22.04.5 LTS (64-bit)**:
    - Go to: `Other general-purpose OS > Ubuntu > Ubuntu Desktop 22.04.5 LTS`.
@@ -87,7 +114,7 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
 
 ---
 
-### Step 4: Install PipeWire
+### Step 2: Install PipeWire
 1. SSH into the Raspberry Pi once it is running:
    ```bash
    ssh <username>@<raspberry_pi_ip>
@@ -97,7 +124,7 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
 
 ---
 
-### Step 5: Connect Bluetooth Device for Audio I/O
+### Step 3: Connect Bluetooth Device for Audio I/O
 1. Use the following commands to connect your Bluetooth headset:
    - Scan for devices:
      ```bash
@@ -124,7 +151,7 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
 
 ---
 
-### Step 6: Test Audio on Node
+### Step 4: Test Audio on Node
 1. Record audio from the microphone:
    ```bash
    arecord -D pipewire -r 16000 -c 1 -f S16_LE -t wav -d 5 test.wav
@@ -138,10 +165,25 @@ This initiative lays the groundwork for accessible, intelligent, and interactive
 
 ---
 
-### Step 7: Set Up Wyoming Satellite
+### Step 5: Set Up Wyoming Satellite
 Follow the detailed guide to set up Wyoming Satellite on your Raspberry Pi:
-[Setup a Raspberry Pi Zero 2 W as a Wyoming Satellite](https://www.slacker-labs.com/setup-a-raspberry-pi-zero-2-w-as-a-wyoming-satellite/).
+[Wyomming Satellite Setup](https://drive.google.com/file/d/1VhVUEPQiGz3orX6F_mTZRYqFsTi2QkI4/view?usp=sharing).
 
+Document mentioned in the video tutorial [Link](https://www.slacker-labs.com/setup-a-raspberry-pi-zero-2-w-as-a-wyoming-satellite/).
+
+---
+
+## Installation Steps on Rapberry Pi 1
+### Step 1: Install Home Assistant OS on Second PI:
+1. Install **Raspberry Pi Imager** from [https://www.raspberrypi.com/software/](https://www.raspberrypi.com/software/).
+2. Use the imager to install **HomeAssistant OS**:
+   - Go to: `Other specific-purpose OS > Home Assistant and Home Automation > Home Assistant`.
+3. Flash the OS to an SD card and insert it into the Raspberry Pi.
+
+---
+
+### Step 2: Configuration
+Refer to this detailed video explanation for the same [Link](https://drive.google.com/file/d/1d1jemFtziGqCuP5M1FA6Jw559HZlRKJM/view?usp=drive_link).
 ---
 
 ## Future Enhancements
