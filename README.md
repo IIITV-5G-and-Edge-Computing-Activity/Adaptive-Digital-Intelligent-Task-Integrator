@@ -1,4 +1,10 @@
 # Adaptive-Digital-Intelligent-Task-Integrator
+## Team members:
+- Takshal Modi (202151170)
+- Tanish Nagrani (202151190)
+- Varun Vilvadrinath (202151195)
+- Shubham Mehatre (202152323)
+- Rushabh Babre (202152334)
 
 ## Project Description
 This project explores the integration of conversational AI and home automation systems using cost-effective and compact hardware solutions. Utilizing two Raspberry Pi devices, the system combines voice-based control with intelligent automation. 
